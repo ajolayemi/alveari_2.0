@@ -16,7 +16,6 @@ ALV_API_KEY_JSON_FILE = 'alveari_api_key.json'
 GOOGLE_SHEETS_INFO_JSON = 'google_sheet_info.json'
 JSON_FILE_CONTENTS = helper_functions.json_file_loader(
     file_name=GOOGLE_SHEETS_INFO_JSON)
-print(JSON_FILE_CONTENTS)
 
 
 class AlvApiThread(QObject):
@@ -44,6 +43,12 @@ class AlvApiThread(QObject):
 
         self.all_wb_content = self.get_all_wb_contents()
 
+    def get_tot_box(self, order_num: str) -> int:
+        """ Returns the quantity of cubotto (boxes) ordered by a client
+        with the specified order_num. """
+        order_content = list(filter(lambda x: x[4] == "CUSTOM SET" and x[1] == order_num, self.all_wb_content))
+        return int(order_content[0][5]) if order_content else 0
+
     def get_all_order_numbers(self):
         """ Returns a list of all clients' order numbers. """
         order_nums = []
@@ -68,4 +73,4 @@ class AlvApiThread(QObject):
 
 
 if __name__ == '__main__':
-    print(AlvApiThread().get_all_order_numbers())
+    print(AlvApiThread().get_tot_box(order_num='493 - 202'))
