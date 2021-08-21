@@ -42,6 +42,15 @@ class AlvApiThread(QObject):
 
         self._create_api_service()
 
+    def get_all_order_numbers(self):
+        """ Returns a list of all clients' order numbers. """
+        all_wb_contents = self.get_all_wb_contents()
+        order_nums = []
+        for order_content in all_wb_contents[1:]:
+            if order_content[1] not in order_nums:
+                order_nums.append(order_content[1])
+        return order_nums
+
     def get_all_wb_contents(self):
         """ Uses the sheet api connection established with Google Sheet
         to retrieve all the data contained in the workbook where clients
@@ -58,4 +67,4 @@ class AlvApiThread(QObject):
 
 
 if __name__ == '__main__':
-    print(AlvApiThread().get_all_wb_contents())
+    print(AlvApiThread().get_all_order_numbers())
