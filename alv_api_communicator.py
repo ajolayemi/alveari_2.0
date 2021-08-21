@@ -1,4 +1,4 @@
-#!usr/bin/env python
+#!/usr/bin/env python
 
 """ Handles communication between Python and Google Sheets API. """
 
@@ -13,8 +13,10 @@ from helper_modules import helper_functions
 
 
 ALV_API_KEY_JSON_FILE = 'alveari_api_key.json'
+GOOGLE_SHEETS_INFO_JSON = 'google_sheet_info.json'
 JSON_FILE_CONTENTS = helper_functions.json_file_loader(
-    file_name=ALV_API_KEY_JSON_FILE)
+    file_name=GOOGLE_SHEETS_INFO_JSON)
+print(JSON_FILE_CONTENTS)
 
 
 class AlvApiThread(QObject):
@@ -40,7 +42,20 @@ class AlvApiThread(QObject):
 
         self._create_api_service()
 
+    def get_all_wb_contents(self):
+        """ Uses the sheet api connection established with Google Sheet
+        to retrieve all the data contained in the workbook where clients
+        orders are stored. """
+        wb_contents = self.sheet_api.values().get(
+            spreadsheetId=self.spreadsheet_id,
+            range=self.cell_range_to_read).execute()
+
+        return wb_contents.get('values', [])
+
     def _create_api_service(self):
         self.api_service = build('sheets', 'v4', credentials=self.creds)
         self.sheet_api = self.api_service.spreadsheets()
 
+
+if __name__ == '__main__':
+    print(AlvApiThread().get_all_wb_contents())
