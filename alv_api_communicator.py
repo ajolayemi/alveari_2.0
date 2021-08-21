@@ -42,11 +42,12 @@ class AlvApiThread(QObject):
 
         self._create_api_service()
 
+        self.all_wb_content = self.get_all_wb_contents()
+
     def get_all_order_numbers(self):
         """ Returns a list of all clients' order numbers. """
-        all_wb_contents = self.get_all_wb_contents()
         order_nums = []
-        for order_content in all_wb_contents[1:]:
+        for order_content in self.all_wb_content[1:]:
             if order_content[1] not in order_nums:
                 order_nums.append(order_content[1])
         return order_nums
