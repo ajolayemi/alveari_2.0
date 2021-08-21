@@ -34,3 +34,13 @@ class AlvApiThread(QObject):
         self.cell_range_to_read = JSON_FILE_CONTENTS.get('wb_cell_for_reading_range')
         self.cell_range_for_writing = JSON_FILE_CONTENTS.get('wb_cell_for_writing_range')
         self.cell_range_to_clear = JSON_FILE_CONTENTS.get('wb_cell_to_be_cleared_range')
+
+        self.api_service = None
+        self.sheet_api = None
+
+        self._create_api_service()
+
+    def _create_api_service(self):
+        self.api_service = build('sheets', 'v4', credentials=self.creds)
+        self.sheet_api = self.api_service.spreadsheets()
+
