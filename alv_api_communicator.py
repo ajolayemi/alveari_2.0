@@ -43,6 +43,11 @@ class AlvApiThread(QObject):
 
         self.all_wb_content = self.get_all_wb_contents()
 
+    def get_client_order(self, order_num: str) -> list[list]:
+        """ Returns a nested list of what a client with the provided order_num
+        has ordered. """
+        return list(filter(lambda x: x[4] != "CUSTOM SET" and x[1] == order_num, self.all_wb_content))
+
     def get_tot_box(self, order_num: str) -> int:
         """ Returns the quantity of cubotto (boxes) ordered by a client
         with the specified order_num. """
@@ -65,7 +70,8 @@ class AlvApiThread(QObject):
             spreadsheetId=self.spreadsheet_id,
             range=self.cell_range_to_read).execute()
 
-        return wb_contents.get('values', [])
+        all_values = wb_contents.get('values', [])
+        return sorted(all_values, key=lambda x: x[4])
 
     def _create_api_service(self):
         self.api_service = build('sheets', 'v4', credentials=self.creds)
@@ -73,4 +79,4 @@ class AlvApiThread(QObject):
 
 
 if __name__ == '__main__':
-    print(AlvApiThread().get_tot_box(order_num='493 - 202'))
+    print(AlvApiThread().get_client_order(order_num='483 - 2021'))
