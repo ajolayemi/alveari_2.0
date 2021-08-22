@@ -39,6 +39,41 @@ class AlvMainWindow(QMainWindow):
 
         self._create_btn_connections()
 
+    def _create_btn_connections(self):
+        """ Connects buttons signals to their corresponding slots. """
+        self.close_btn.clicked.connect(self._close_btn_responder)
+
+    def _gen_order_thread(self):
+        """ Responds to user click on 'Generare Spese button. """
+
+        self._order_thread = QThread()
+
+        self._order_gen_class_thread = AlvApiThread()
+
+        # Move Thread
+        self._order_gen_class_thread.moveToThread(self._order_thread)
+
+        # Connect thread and function that generates order
+        self._order_thread.started.connect(
+            self._order_gen_class_thread.manual_generator)
+
+        # Update app's state
+        self._order_gen_class_thread.started.connect(self._update_while_busy)
+        self._order_gen_class_thread.finished.connect(self._update_while_done)
+        self._order_gen_class_thread.unfinished.connect(self._update_while_done)
+        self._order_gen_class_thread.finished.connect(self._communicate_success)
+        self._order_gen_class_thread.unfinished.connect(self._communicate_failure)
+
+        # Clean up thread
+        self._order_gen_class_thread.finished.connect(self._order_thread.quit)
+        self._order_gen_class_thread.unfinished.connect(self._order_thread.quit)
+
+        self._order_gen_class_thread.finished.connect(self._order_thread.deleteLater)
+        self._order_gen_class_thread.unfinished.connect(self._order_thread.deleteLater)
+
+        # Start thread
+        self._order_thread.start()
+
     def _update_while_done(self):
         """ Updates App's state when it's done generating order subdivision. """
         self.generate_order_btn.setEnabled(True)
@@ -66,10 +101,6 @@ class AlvMainWindow(QMainWindow):
             output_type=False,
             button_pressed=self.generate_order_btn.text()
         )
-
-    def _create_btn_connections(self):
-        """ Connects buttons signals to their corresponding slots. """
-        self.close_btn.clicked.connect(self._close_btn_responder)
 
     def _close_btn_responder(self):
         """ Responds to user's click on the button named
