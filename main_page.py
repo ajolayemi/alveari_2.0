@@ -37,6 +37,16 @@ class AlvMainWindow(QMainWindow):
 
         self._add_wids()
 
+    def _close_btn_responder(self):
+        """ Responds to user's click on the button named
+        'Chiudi'. """
+        user_choice = helper_functions.ask_before_close(
+            msg_box_font=MSG_FONT,
+            window_tile=WINDOW_TITLE
+        )
+        if user_choice == QMessageBox.Yes:
+            self.close()
+
     def _add_wids(self):
         """ Adds necessary widgets. """
         user_name = helper_functions.get_user_name()
