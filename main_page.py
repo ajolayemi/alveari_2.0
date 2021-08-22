@@ -9,8 +9,8 @@ from PyQt5.QtWidgets import (QMainWindow, QWidget,
                              QVBoxLayout, QApplication,
                              QLabel, QPushButton, QFormLayout,
                              QMessageBox)
-
 from helper_modules import helper_functions
+
 from alv_api_communicator import AlvApiThread
 
 MSG_FONT = QFont('Italics', 13)
