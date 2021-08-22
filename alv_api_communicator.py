@@ -20,6 +20,7 @@ BOX_CAPACITY = 100
 class AlvApiThread(QObject):
 
     # Custom signals
+    started = pyqtSignal()
     finished = pyqtSignal()
     unfinished = pyqtSignal()
 
@@ -55,7 +56,7 @@ class AlvApiThread(QObject):
         order_numbers = self.get_all_order_numbers()
 
         final_data = []
-
+        self.started.emit()
         for current_order_num in order_numbers:
             if current_order_num in processed_orders:
                 continue
