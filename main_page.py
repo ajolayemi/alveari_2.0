@@ -19,3 +19,19 @@ SPREADSHEET_INFO_JSON_FILE = 'google_sheet_info.json'
 JSON_FILE_CONTENT = helper_functions.json_file_loader(
     file_name=SPREADSHEET_INFO_JSON_FILE
 )
+WINDOW_TITLE = JSON_FILE_CONTENT.get('window_title')
+
+
+class AlvMainWindow(QMainWindow):
+
+    def __init__(self, parent=None):
+        super(AlvMainWindow, self).__init__(parent)
+        self.setWindowTitle(WINDOW_TITLE)
+        self.resize(300, 110)
+        self.central_widget = QWidget()
+        self.window_layout = QVBoxLayout()
+
+        self.central_widget.setLayout(self.window_layout)
+        self.setCentralWidget(self.central_widget)
+
+
