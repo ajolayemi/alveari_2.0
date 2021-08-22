@@ -39,6 +39,16 @@ class AlvMainWindow(QMainWindow):
 
         self._create_btn_connections()
 
+    def _update_while_done(self):
+        """ Updates App's state when it's done generating order subdivision. """
+        self.generate_order_btn.setEnabled(True)
+        self.close_btn.setEnabled(True)
+
+    def _update_while_busy(self):
+        """ Updates App's state while it's busy generating order subdivision. """
+        self.generate_order_btn.setEnabled(False)
+        self.close_btn.setEnabled(False)
+
     def _communicate_success(self):
         """ Communicates successful operation to user. """
         helper_functions.output_communicator(
