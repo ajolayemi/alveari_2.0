@@ -35,6 +35,8 @@ class AlvMainWindow(QMainWindow):
         self.central_widget.setLayout(self.window_layout)
         self.setCentralWidget(self.central_widget)
 
+        self._add_wids()
+
     def _add_wids(self):
         """ Adds necessary widgets. """
         user_name = helper_functions.get_user_name()
