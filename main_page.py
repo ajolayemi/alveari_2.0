@@ -39,6 +39,24 @@ class AlvMainWindow(QMainWindow):
 
         self._create_btn_connections()
 
+    def _communicate_success(self):
+        """ Communicates successful operation to user. """
+        helper_functions.output_communicator(
+            msg_box_font=MSG_FONT,
+            window_title=WINDOW_TITLE,
+            output_type=True,
+            button_pressed=self.generate_order_btn.text()
+        )
+
+    def _communicate_failure(self):
+        """ Communicates failed operation to user  """
+        helper_functions.output_communicator(
+            msg_box_font=MSG_FONT,
+            window_title=WINDOW_TITLE,
+            output_type=False,
+            button_pressed=self.generate_order_btn.text()
+        )
+
     def _create_btn_connections(self):
         """ Connects buttons signals to their corresponding slots. """
         self.close_btn.clicked.connect(self._close_btn_responder)
