@@ -37,6 +37,12 @@ class AlvMainWindow(QMainWindow):
 
         self._add_wids()
 
+        self._create_btn_connections()
+
+    def _create_btn_connections(self):
+        """ Connects buttons signals to their corresponding slots. """
+        self.close_btn.clicked.connect(self._close_btn_responder)
+
     def _close_btn_responder(self):
         """ Responds to user's click on the button named
         'Chiudi'. """
