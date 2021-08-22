@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 """ Program's main GUI window. """
+import sys
 
 from PyQt5.QtCore import QThread
 from PyQt5.QtGui import QFont
@@ -57,3 +58,14 @@ class AlvMainWindow(QMainWindow):
             self.form_layout_.addRow(f'{button_index + 1}', button_name)
 
         self.window_layout.addLayout(self.form_layout_)
+
+
+def main():
+    app = QApplication(sys.argv)
+    window = AlvMainWindow()
+    window.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
