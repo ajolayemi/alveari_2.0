@@ -6,6 +6,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from math import floor
+import pandas as pd
 # helper_modules is a self defined module
 from helper_modules import helper_functions
 
@@ -225,4 +226,4 @@ class AlvApiThread(QObject):
 
 
 if __name__ == '__main__':
-    print(AlvApiThread().manual_generator())
+    pass
