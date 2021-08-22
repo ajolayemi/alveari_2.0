@@ -42,6 +42,7 @@ class AlvMainWindow(QMainWindow):
     def _create_btn_connections(self):
         """ Connects buttons signals to their corresponding slots. """
         self.close_btn.clicked.connect(self._close_btn_responder)
+        self.generate_order_btn.clicked.connect(self._gen_order_thread)
 
     def _gen_order_thread(self):
         """ Responds to user click on 'Generare Spese button. """
