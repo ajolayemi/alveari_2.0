@@ -176,7 +176,10 @@ class AlvApiThread(QObject):
             body={'values': final_data}
         )
         response = write_data_request.execute()
-        print(response)
+        if response:
+            self.finished.emit()
+        else:
+            self.unfinished.emit()
 
     def get_order_filler_det(self, order_num):
         return list(filter(lambda x: all((x[4] == 'Riempimento',
