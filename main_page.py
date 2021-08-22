@@ -34,4 +34,26 @@ class AlvMainWindow(QMainWindow):
         self.central_widget.setLayout(self.window_layout)
         self.setCentralWidget(self.central_widget)
 
+    def _add_wids(self):
+        """ Adds necessary widgets. """
+        user_name = helper_functions.get_user_name()
+        self.greeting_lbl = QLabel(f'<h1> Ciao {user_name} </h1>')
+        self.window_layout.addWidget(self.greeting_lbl)
 
+        # Buttons
+        self.generate_order_btn = QPushButton('Generare Spese')
+        self.generate_order_btn.setFont(BUTTONS_FONT)
+        self.generate_order_btn.setStyleSheet('color: blue')
+
+        self.close_btn = QPushButton('Chiudi')
+        self.close_btn.setFont(BUTTONS_FONT)
+        self.close_btn.setStyleSheet('color: red')
+
+        buttons_lst = [self.generate_order_btn, self.close_btn]
+
+        self.form_layout_ = QFormLayout()
+
+        for button_index, button_name in enumerate(buttons_lst):
+            self.form_layout_.addRow(f'{button_index + 1}', button_name)
+
+        self.window_layout.addLayout(self.form_layout_)
