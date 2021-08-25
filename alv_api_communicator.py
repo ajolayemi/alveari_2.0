@@ -88,8 +88,6 @@ class AlvApiThread(QObject):
                         remainder = int(ordered_qta - qta_satisfied)
 
                         for box in box_dict:
-                            # Get available space
-                            available_space = BOX_CAPACITY - box_dict.get(box)
 
                             # If the remainder value is 0
                             if remainder == 0:
@@ -102,6 +100,9 @@ class AlvApiThread(QObject):
                             # If the current box is already full
                             if box_dict[box] >= BOX_CAPACITY:
                                 continue
+
+                            # Get available space
+                            available_space = BOX_CAPACITY - box_dict.get(box)
 
                             if ordered_qta != qta_satisfied:
                                 # Get the required space, i.e the space needed in a
@@ -136,7 +137,7 @@ class AlvApiThread(QObject):
                                     remainder = ordered_qta - qta_satisfied
 
                                     final_occupation = round((possible_qta / product_ratio) * BOX_CAPACITY)
-                                    box_dict[box] = final_occupation
+                                    box_dict[box] += final_occupation
                                     data = [order_code, product_id, product_name, possible_qta,
                                             box, 'di', client_total_boxes]
                                     final_data.append(data)
