@@ -54,7 +54,6 @@ class AlvApiThread(QObject):
         processed_orders = []
         # Get all order nums
         order_numbers = self.get_all_order_numbers()
-
         final_data = []
         self.started.emit()
         for current_order_num in order_numbers:
@@ -72,7 +71,7 @@ class AlvApiThread(QObject):
                 if client_order:
                     for current_order in client_order:
                         product_id = current_order[2]
-                        product_name = current_order[3]
+                        product_name = helper_functions.name_controller(name=current_order[3], char_to_remove="'")
                         ordered_qta = int(current_order[5])
                         product_ratio = int(current_order[6])
                         order_code = self.get_order_code(
@@ -154,7 +153,7 @@ class AlvApiThread(QObject):
                         filler_name = filler_det[0][3]
                         filler_qta = filler_det[0][5]
                     else:
-                        pass
+                        continue
 
                     for box in incomplete_boxes:
                         if box == incomplete_boxes[-1] and not found_empty_box:
