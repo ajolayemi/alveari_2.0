@@ -41,7 +41,9 @@ class AlvApiThread(QObject):
 
         self._create_api_service()
 
-        self.all_wb_content = self.get_all_wb_contents()
+        self.all_wb_content = []
+
+        self.get_all_wb_contents()
 
     def manual_generator(self):
         # The following statements clears existing data in the workbook
@@ -196,8 +198,30 @@ class AlvApiThread(QObject):
     def get_client_order(self, order_num: str) -> list[list]:
         """ Returns a nested list of what a client with the provided order_num
         has ordered. """
-        return list(filter(lambda x: all((x[4] != "CUSTOM SET", x[4] != 'Riempimento',
-                                          x[1] == order_num)), self.all_wb_content))
+        dry_order = self.get_client_dry_order(order_num)
+        fresh_order = self.get_client_fresh_order(order_num)
+
+        return dry_order + fresh_order
+
+    def get_client_fresh_order(self, order_num: str) -> list[list]:
+        """ Returns a nested list of all order that has to do with dry product
+        ordered by client with order_num.
+        The returned list is sorted from the fresh product with the lowest occupation
+        ratio to the one with the highest occupation ratio. """
+        fresh_code = JSON_FILE_CONTENTS.get("fresh_code")
+
+        fresh_order = list(filter(lambda x: x[4] == fresh_code and x[1] == order_num, self.all_wb_content))
+        return sorted(fresh_order, key=lambda x: int(x[7]))
+
+    def get_client_dry_order(self, order_num: str) -> list[list]:
+        """ Returns a nested list of all order that has to do with dry product
+        ordered by client with order_num.
+        The returned list is sorted from the dry product with the highest occupation
+        ratio to the one with the lowest occupation ratio."""
+        dry_code = JSON_FILE_CONTENTS.get("dry_code")
+
+        dry_order = list(filter(lambda x: x[4] == dry_code and x[1] == order_num, self.all_wb_content))
+        return sorted(dry_order, key=lambda x: int(x[7]), reverse=True)
 
     def get_tot_box(self, order_num: str) -> int:
         """ Returns the quantity of cubotto (boxes) ordered by a client
@@ -221,8 +245,7 @@ class AlvApiThread(QObject):
             spreadsheetId=self.spreadsheet_id,
             range=self.cell_range_to_read).execute()
 
-        all_values = wb_contents.get('values', [])[1:]
-        return sorted(all_values, key=lambda x: x[4])
+        self.all_wb_content = wb_contents.get('values', [])[1:]
 
     def _create_api_service(self):
         self.api_service = build('sheets', 'v4', credentials=self.creds)
